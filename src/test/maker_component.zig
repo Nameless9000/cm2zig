@@ -26,7 +26,7 @@ test "component led switch" {
   var out = std.ArrayList(u8).init(allocator);
   defer out.deinit();
 
-  var writer = out.writer().any();
+  var writer = out.writer();
   try creation.compile(&writer);
 
   try testing.expectEqualStrings(
@@ -110,7 +110,7 @@ test "component compile" {
   var out = std.ArrayList(u8).init(allocator);
   defer out.deinit();
 
-  var writer = out.writer().any();
+  var writer = out.writer();
   try creation.compile(&writer);
 
   try testing.expectEqualStrings(

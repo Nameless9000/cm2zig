@@ -57,7 +57,7 @@ pub const Creation = struct {
 
     if (idInt < 10) {
       try self.data.appendSlice(&[_]u8{idInt + '0', ',', ','});
-    } if (idInt < 20) {
+    } else if (idInt < 20) {
       try self.data.appendSlice(&[_]u8{'1', idInt % 10 + '0', ',', ','});
     } else {
       try self.data.appendSlice(&[_]u8{'2', idInt % 10 + '0', ',', ','});
@@ -96,9 +96,9 @@ pub const Creation = struct {
   pub inline fn connect(self: *Creation, nodeA: u32, nodeB: u32) !void {
     const writer = self.connections.writer();
     try std.fmt.formatInt(nodeA, 10, .lower, .{}, writer);
-    try self.data.append(',');
+    try self.connections.append(',');
     try std.fmt.formatInt(nodeB, 10, .lower, .{}, writer);
-    try self.data.append(';');
+    try self.connections.append(';');
   }
 
   pub fn init(allocator: std.mem.Allocator) Creation {

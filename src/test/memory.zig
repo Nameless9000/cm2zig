@@ -22,7 +22,7 @@ test "memory 8b register" {
   var out = std.ArrayList(u8).init(allocator);
   defer out.deinit();
 
-  var writer = out.writer().any();
+  var writer = out.writer();
   try creation.compile(&writer);
 
   try testing.expectEqualStrings(
