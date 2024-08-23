@@ -29,15 +29,15 @@ pub const Connection = struct { nodeA: u32, nodeB: u32 };
 
 
 pub const Creation = struct {
-  data: std.ArrayList(u8),
+  blocks: std.ArrayList(u8),
   connections: std.ArrayList(u8),
   handle: u32,
 
   pub fn compile(self: *Creation, writer: anytype) !void {
-    if (self.data.items.len > 0) {
-      _ = self.data.pop();
-      try writer.writeAll(self.data.items);
-      try self.data.append(';');
+    if (self.blocks.items.len > 0) {
+      _ = self.blocks.pop();
+      try writer.writeAll(self.blocks.items);
+      try self.blocks.append(';');
 
       try writer.writeAll("?");
     }
@@ -53,7 +53,7 @@ pub const Creation = struct {
 
   pub fn addBlock(self: *Creation, id: NodeType, position: ?@Vector(3, i16), properties: ?[]const i16) !void {
     const idInt = @intFromEnum(id);
-    const writer = self.data.writer();
+    const writer = self.blocks.writer();
 
     if (idInt < 10) {
       try writer.writeAll(.{idInt + '0'} ++ ",,");
@@ -63,11 +63,11 @@ pub const Creation = struct {
     
     if (position) |pos| {
       try std.fmt.formatInt(pos[0], 10, .lower, .{}, writer);
-      try self.data.append(',');
+      try self.blocks.append(',');
       try std.fmt.formatInt(pos[1], 10, .lower, .{}, writer);
-      try self.data.append(',');
+      try self.blocks.append(',');
       try std.fmt.formatInt(pos[2], 10, .lower, .{}, writer);
-      try self.data.append(',');
+      try self.blocks.append(',');
     } else {
       try writer.writeAll(",,,");
     }
@@ -75,14 +75,14 @@ pub const Creation = struct {
     if (properties) |prop| {
       for (prop) |val| {
         try std.fmt.formatInt(val, 10, .lower, .{}, writer);
-        try self.data.append('+');
+        try self.blocks.append('+');
       }
       
       if (prop.len != 0) {
-        _ = self.data.pop();
+        _ = self.blocks.pop();
       }
     }
-    try self.data.append(';');
+    try self.blocks.append(';');
 
     self.handle += 1;
   }
@@ -101,14 +101,14 @@ pub const Creation = struct {
 
   pub fn init(allocator: std.mem.Allocator) Creation {
     return Creation {
-      .data = std.ArrayList(u8).init(allocator),
+      .blocks = std.ArrayList(u8).init(allocator),
       .connections = std.ArrayList(u8).init(allocator),
       .handle = 0,
     };
   }
 
   pub fn deinit(self: Creation) void {
-    self.data.deinit();
+    self.blocks.deinit();
     self.connections.deinit();
   }
 };

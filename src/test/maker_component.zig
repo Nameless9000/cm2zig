@@ -1,7 +1,7 @@
 const std = @import("std");
 const testing = std.testing;
 
-const maker = @import("../maker.zig");
+const maker = @import("../lib/maker.zig");
 
 const allocator = testing.allocator;
 
@@ -59,7 +59,7 @@ test "component add block" {
 
   try testing.expectEqualStrings(
     "1,,-11,4,3,;3,,,,,;1,,1,1,1,;6,,11,-9,2544,123+123+23;10,,,,,-12+0+0+0+3434;4,,1,1,1,;",
-    component.creation.data.items
+    component.creation.blocks.items
   );
 }
 

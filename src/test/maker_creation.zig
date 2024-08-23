@@ -1,8 +1,8 @@
 const std = @import("std");
 const testing = std.testing;
 
-const maker = @import("../maker.zig");
-const memory = @import("../memory.zig");
+const maker = @import("../lib/maker.zig");
+const memory = @import("../lib/memory.zig");
 
 const allocator = testing.allocator;
 
@@ -56,7 +56,7 @@ test "creation add block" {
 
   try testing.expectEqualStrings(
     "1,,-12,3,2,;3,,,,,;1,,0,0,0,;6,,10,-10,2543,123+123+23;10,,,,,-12+0+0+0+3434;4,,0,0,0,;",
-    creation.data.items
+    creation.blocks.items
   );
 }
 

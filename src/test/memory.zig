@@ -1,8 +1,8 @@
 const std = @import("std");
 const testing = std.testing;
 
-const maker = @import("../maker.zig");
-const memory = @import("../memory.zig");
+const maker = @import("../lib/maker.zig");
+const memory = @import("../lib/memory.zig");
 
 const allocator = testing.allocator;
 
