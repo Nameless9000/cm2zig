@@ -44,6 +44,8 @@ pub fn main() !void {
   const id = try std.fmt.parseInt(u8, args[1], 10);
   const size = try std.fmt.parseInt(u16, args[2], 10);
 
+  var timer = try std.time.Timer.start();
+
   var x: i16 = 0;
   
   while (x < size) : (x+=1) {
@@ -58,6 +60,10 @@ pub fn main() !void {
     }
   }
 
+  std.debug.print("Generation: {}ns\n", .{timer.lap()});
+
   var out = std.io.getStdOut();
   try creation.compile(&out);
+
+  std.debug.print("Compilation: {}ns\n", .{timer.lap()});
 }

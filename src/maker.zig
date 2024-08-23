@@ -37,7 +37,7 @@ pub const Creation = struct {
     if (self.data.items.len > 0) {
       _ = self.data.pop();
       try writer.writeAll(self.data.items);
-      try self.data.appendSlice(";");
+      try self.data.append(';');
 
       try writer.writeAll("?");
     }
@@ -45,7 +45,7 @@ pub const Creation = struct {
     if (self.connections.items.len > 0) {
       _ = self.connections.pop();
       try writer.writeAll(self.connections.items);
-      try self.connections.appendSlice(";");
+      try self.connections.append(';');
 
       try writer.writeAll("?");
     }
@@ -56,13 +56,11 @@ pub const Creation = struct {
     const writer = self.data.writer();
 
     if (idInt < 10) {
-      try self.data.appendSlice(&[_]u8{idInt + '0', ',', ','});
-    } else if (idInt < 20) {
-      try self.data.appendSlice(&[_]u8{'1', idInt % 10 + '0', ',', ','});
+      try writer.writeAll(.{idInt + '0'} ++ ",,");
     } else {
-      try self.data.appendSlice(&[_]u8{'2', idInt % 10 + '0', ',', ','});
+      try writer.writeAll(&std.fmt.digits2(idInt) ++ ",,");
     }
-
+    
     if (position) |pos| {
       try std.fmt.formatInt(pos[0], 10, .lower, .{}, writer);
       try self.data.append(',');
@@ -71,7 +69,7 @@ pub const Creation = struct {
       try std.fmt.formatInt(pos[2], 10, .lower, .{}, writer);
       try self.data.append(',');
     } else {
-      try self.data.appendSlice(",,,");
+      try writer.writeAll(",,,");
     }
 
     if (properties) |prop| {
