@@ -1,31 +1,5 @@
 const std = @import("std");
-const maker = @import("maker.zig");
-const memory = @import("memory.zig");
-
-fn makeReg(allocator: std.mem.Allocator) !void {
-  var creation = maker.Creation.init(allocator);
-  defer creation.deinit();
-
-  const bits = 10;
-  
-  const register = try memory.makeRegister(&creation, bits, .{0, 0, 0});
-
-  const toggle = try creation.addBlockH(.FLIPFLOP, .{0, 0, -1}, null);
-  const input = try creation.addBlockH(.BUTTON, .{1, 0, -1}, null);
-
-  try creation.connect(toggle, memory.getRegisterWrite(register, 3));
-  try creation.connect(input, memory.getRegisterInput(register, 3));
-
-  var outw = std.io.getStdOut().writer().any();
-  try creation.compile(&outw);
-}
-
-fn calcCubeMem(comptime maxX: f64, comptime maxY: f64, comptime maxZ: f64, comptime maxBlocks: u32) comptime_int {
-  const id = 2;
-  const pad = 5;
-
-  return (id + @ceil(@log10(maxX))  + @ceil(@log10(maxY)) + @ceil(@log10(maxZ)) + pad) * maxBlocks;
-}
+const maker = @import("lib/maker.zig");
 
 pub fn main() !void {
   var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
