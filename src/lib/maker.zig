@@ -94,9 +94,9 @@ pub const Creation = struct {
   pub inline fn connect(self: *Creation, nodeA: u32, nodeB: u32) !void {
     const writer = self.connections.writer();
     try std.fmt.formatInt(nodeA, 10, .lower, .{}, writer);
-    try self.connections.append(',');
+    try writer.writeByte(',');
     try std.fmt.formatInt(nodeB, 10, .lower, .{}, writer);
-    try self.connections.append(';');
+    try writer.writeByte(';');
   }
 
   pub fn init(allocator: std.mem.Allocator) Creation {
