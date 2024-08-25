@@ -1,4 +1,4 @@
-test {
-  _ = @import("bench/maker.zig");
-  _ = @import("bench/memory.zig");
+pub fn main() !void {
+    try @import("bench/maker.zig").run();
+    try @import("bench/memory.zig").run();
 }

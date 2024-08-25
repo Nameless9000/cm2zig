@@ -16,26 +16,24 @@ pub fn build(b: *std.Build) void {
     const optimize = b.standardOptimizeOption(.{});
 
     b.installArtifact(b.addExecutable(.{
-      .name = "cube",
-      .root_source_file = b.path("src/cube.zig"),
-      .target = target,
-      .optimize = optimize,
-      .strip = true,
+        .name = "cube",
+        .root_source_file = b.path("src/cube.zig"),
+        .target = target,
+        .optimize = optimize,
+        .strip = true,
     }));
     b.installArtifact(b.addExecutable(.{
-      .name = "reg",
-      .root_source_file = b.path("src/reg.zig"),
-      .target = target,
-      .optimize = optimize,
-      .strip = true,
+        .name = "reg",
+        .root_source_file = b.path("src/reg.zig"),
+        .target = target,
+        .optimize = optimize,
+        .strip = true,
     }));
 
-
-
     const unit_tests = b.addTest(.{
-      .root_source_file = b.path("src/test.zig"),
-      .target = target,
-      .optimize = optimize,
+        .root_source_file = b.path("src/test.zig"),
+        .target = target,
+        .optimize = optimize,
     });
 
     const run_unit_tests = b.addRunArtifact(unit_tests);
@@ -43,15 +41,16 @@ pub fn build(b: *std.Build) void {
     const test_step = b.step("test", "Run unit tests");
     test_step.dependOn(&run_unit_tests.step);
 
-
-    const benchmarks = b.addTest(.{
-      .root_source_file = b.path("src/bench.zig"),
-      .target = target,
-      .optimize = .ReleaseFast,
+    const benchmarks = b.addExecutable(.{
+        .name = "benchmark",
+        .root_source_file = b.path("src/bench.zig"),
+        .target = target,
+        .optimize = .ReleaseFast,
     });
 
+    b.installArtifact(benchmarks);
     const run_benchmarks = b.addRunArtifact(benchmarks);
-    
+
     const bench_step = b.step("bench", "Run benchmarks");
     bench_step.dependOn(&run_benchmarks.step);
 }
