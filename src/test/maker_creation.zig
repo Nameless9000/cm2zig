@@ -50,7 +50,7 @@ test "creation add block" {
 
     try testing.expectEqual(6, creation.handle);
 
-    try testing.expectEqualStrings("1,,-12,3,2,;3,,,,,;1,,0,0,0,;6,,10,-10,2543,0123+0123+23;10,,,,,-12+0+0+0+3434;4,,0,0,0,;", creation.blocks.items);
+    try testing.expectEqualStrings("1,,-12,3,2,;3,,,,,;1,,0,0,0,;6,,10,-10,2543,123+123+23;10,,,,,-12+0+0+0+3434;4,,0,0,0,;", creation.blocks.items);
 }
 
 test "creation add connection" {
@@ -96,5 +96,5 @@ test "creation compile" {
     var writer = out.writer();
     try creation.compile(&writer);
 
-    try testing.expectEqualStrings("1,,-12,3,2,;3,,,,,;1,,0,0,0,;6,,10,-10,2543,0123+0123+23;10,,,,,-12+0+0+0+3434;4,,0,0,0,?0,0;1,2;12,934213;77777777,04435546;9999,9999;9999,1234?", out.items);
+    try testing.expectEqualStrings("1,,-12,3,2,;3,,,,,;1,,0,0,0,;6,,10,-10,2543,123+123+23;10,,,,,-12+0+0+0+3434;4,,0,0,0,?0,0;1,2;12,934213;77777777,4435546;9999,9999;9999,1234?", out.items);
 }

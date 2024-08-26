@@ -53,7 +53,7 @@ test "component add block" {
 
     try testing.expectEqual(6, creation.handle);
 
-    try testing.expectEqualStrings("1,,-11,4,3,;3,,,,,;1,,1,1,1,;6,,11,-9,2544,0123+0123+23;10,,,,,-12+0+0+0+3434;4,,1,1,1,;", component.creation.blocks.items);
+    try testing.expectEqualStrings("1,,-11,4,3,;3,,,,,;1,,1,1,1,;6,,11,-9,2544,123+123+23;10,,,,,-12+0+0+0+3434;4,,1,1,1,;", component.creation.blocks.items);
 }
 
 test "component add connection" {
@@ -103,5 +103,5 @@ test "component compile" {
     var writer = out.writer();
     try creation.compile(&writer);
 
-    try testing.expectEqualStrings("1,,-11,4,3,;3,,,,,;1,,1,1,1,;6,,11,-9,2544,0123+0123+23;10,,,,,-12+0+0+0+3434;4,,1,1,1,?0,0;1,2;12,934213;77777777,04435546;9999,9999;9999,1234?", out.items);
+    try testing.expectEqualStrings("1,,-11,4,3,;3,,,,,;1,,1,1,1,;6,,11,-9,2544,123+123+23;10,,,,,-12+0+0+0+3434;4,,1,1,1,?0,0;1,2;12,934213;77777777,4435546;9999,9999;9999,1234?", out.items);
 }

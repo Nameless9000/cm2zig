@@ -60,8 +60,14 @@ fn fastFormatInt(
             p -= 1;
             buf[p] = @intCast(a % 100);
         }
-        p -= 1;
-        buf[p] = @intCast(a);
+
+        if (a < 10) {
+            fbs.buffer[fbs.pos] = '0' + @as(u8, @intCast(a));
+            fbs.pos += 1;
+        } else {
+            fbs.buffer[fbs.pos..][0..2].* = std.fmt.digits2(@as(usize, @intCast(a)));
+            fbs.pos += 2;
+        }
 
         for (buf[p..]) |v| {
             fbs.buffer[fbs.pos..][0..2].* = std.fmt.digits2(@as(usize, @intCast(v)));
