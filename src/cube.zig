@@ -34,10 +34,10 @@ pub fn main() !void {
         }
     }
 
-    std.debug.print("Generation: {}ns\n", .{timer.lap()});
+    std.debug.print("Generation: {}us\n", .{@divTrunc(timer.lap(), 1000)});
 
     var out = std.io.getStdOut();
     try creation.compile(&out);
 
-    std.debug.print("Compilation: {}ns\n", .{timer.lap()});
+    std.debug.print("Compilation: {}us\n", .{@divTrunc(timer.lap(), 1000)});
 }

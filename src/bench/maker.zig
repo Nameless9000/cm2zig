@@ -82,7 +82,29 @@ fn connectionBench2(allocator: std.mem.Allocator, timer: *std.time.Timer) !void 
     }
 }
 
+fn cubeBench1(allocator: std.mem.Allocator, timer: *std.time.Timer) !void {
+    var creation = maker.Creation.init(allocator);
+    defer creation.deinit();
+
+    timer.reset();
+
+    var x: i16 = 0;
+
+    while (x < 100) : (x += 1) {
+        var y: i16 = 0;
+
+        while (y < 100) : (y += 1) {
+            var z: i16 = 0;
+
+            while (z < 100) : (z += 1) {
+                std.mem.doNotOptimizeAway(try creation.addBlock(.NOR, .{ x, y, z }, null));
+            }
+        }
+    }
+}
+
 pub fn run() !void {
+    (try benchmark.run(cubeBench1)).print("100x100x100 cube");
     (try benchmark.run(blockBench1)).print("100k blocks, no data");
     (try benchmark.run(blockBench2)).print("100k blocks, static position data");
     (try benchmark.run(blockBench3)).print("100k blocks, dynamic position data");
