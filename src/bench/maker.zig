@@ -5,31 +5,31 @@ const maker = @import("../lib/maker.zig");
 const memory = @import("../lib/memory.zig");
 
 fn blockBench1(allocator: std.mem.Allocator, timer: *std.time.Timer) !void {
-    var creation = maker.Creation.init(allocator);
+    var creation = try maker.Creation.init(allocator, 100_000, 0);
     defer creation.deinit();
 
     timer.reset();
 
     var count: usize = 0;
     while (count < 100_000) : (count += 1) {
-        std.mem.doNotOptimizeAway(try creation.addBlock(.NOR, null, null));
+        std.mem.doNotOptimizeAway(creation.addBlock(.NOR, null, null));
     }
 }
 
 fn blockBench2(allocator: std.mem.Allocator, timer: *std.time.Timer) !void {
-    var creation = maker.Creation.init(allocator);
+    var creation = try maker.Creation.init(allocator, 100_000, 0);
     defer creation.deinit();
 
     timer.reset();
 
     var count: usize = 0;
     while (count < 100_000) : (count += 1) {
-        std.mem.doNotOptimizeAway(try creation.addBlock(.NOR, .{ 1, 2, 3 }, null));
+        std.mem.doNotOptimizeAway(creation.addBlock(.NOR, .{ 1, 2, 3 }, null));
     }
 }
 
 fn blockBench3(allocator: std.mem.Allocator, timer: *std.time.Timer) !void {
-    var creation = maker.Creation.init(allocator);
+    var creation = try maker.Creation.init(allocator, 100_000, 0);
     defer creation.deinit();
 
     timer.reset();
@@ -39,12 +39,12 @@ fn blockBench3(allocator: std.mem.Allocator, timer: *std.time.Timer) !void {
         const x: i16 = @intCast(count % 100);
         const y: i16 = @intCast(count % 1000);
         const z: i16 = @intCast(count % 10000);
-        std.mem.doNotOptimizeAway(try creation.addBlock(.NOR, .{ x, y, z }, null));
+        std.mem.doNotOptimizeAway(creation.addBlock(.NOR, .{ x, y, z }, null));
     }
 }
 
 fn blockBench4(allocator: std.mem.Allocator, timer: *std.time.Timer) !void {
-    var creation = maker.Creation.init(allocator);
+    var creation = try maker.Creation.init(allocator, 100_000, 0);
     defer creation.deinit();
 
     timer.reset();
@@ -54,36 +54,36 @@ fn blockBench4(allocator: std.mem.Allocator, timer: *std.time.Timer) !void {
         const x: i16 = @intCast(count % 100);
         const y: i16 = @intCast(count % 1000);
         const z: i16 = @intCast(count % 10000);
-        std.mem.doNotOptimizeAway(try creation.addBlock(.NOR, .{ x, y, z }, &[_]i16{ x, y, z }));
+        std.mem.doNotOptimizeAway(creation.addBlock(.NOR, .{ x, y, z }, &[_]i16{ x, y, z }));
     }
 }
 
 fn connectionBench1(allocator: std.mem.Allocator, timer: *std.time.Timer) !void {
-    var creation = maker.Creation.init(allocator);
+    var creation = try maker.Creation.init(allocator, 0, 100_000);
     defer creation.deinit();
 
     timer.reset();
 
     var count: u32 = 0;
     while (count < 100_000) : (count += 1) {
-        std.mem.doNotOptimizeAway(try creation.connect(1, 1));
+        std.mem.doNotOptimizeAway(creation.connect(1, 1));
     }
 }
 
 fn connectionBench2(allocator: std.mem.Allocator, timer: *std.time.Timer) !void {
-    var creation = maker.Creation.init(allocator);
+    var creation = try maker.Creation.init(allocator, 0, 100_000);
     defer creation.deinit();
 
     timer.reset();
 
     var count: u32 = 0;
     while (count < 100_000) : (count += 1) {
-        std.mem.doNotOptimizeAway(try creation.connect(count, count - 5));
+        std.mem.doNotOptimizeAway(creation.connect(count, count - 5));
     }
 }
 
 fn cubeBench1(allocator: std.mem.Allocator, timer: *std.time.Timer) !void {
-    var creation = maker.Creation.init(allocator);
+    var creation = try maker.Creation.init(allocator, 1_000_000, 0);
     defer creation.deinit();
 
     timer.reset();
@@ -97,7 +97,7 @@ fn cubeBench1(allocator: std.mem.Allocator, timer: *std.time.Timer) !void {
             var z: i16 = 0;
 
             while (z < 100) : (z += 1) {
-                std.mem.doNotOptimizeAway(try creation.addBlock(.NOR, .{ x, y, z }, null));
+                std.mem.doNotOptimizeAway(creation.addBlock(.NOR, .{ x, y, z }, null));
             }
         }
     }

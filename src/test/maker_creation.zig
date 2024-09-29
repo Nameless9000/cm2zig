@@ -10,14 +10,14 @@ const allocator = testing.allocator;
 // Working tests
 //
 test "creation led switch" {
-    var creation = maker.Creation.init(allocator);
+    var creation = try maker.Creation.init(allocator, 2, 1);
     defer creation.deinit();
 
     //
-    const LED = try creation.addBlockH(.LED, .{ 0, 5, 0 }, null);
-    const toggle = try creation.addBlockH(.FLIPFLOP, .{ 0, 0, 0 }, null);
+    const LED: u32 = creation.addBlockH(.LED, .{ 0, 5, 0 }, null);
+    const toggle: u32 = creation.addBlockH(.FLIPFLOP, .{ 0, 0, 0 }, null);
 
-    try creation.connect(toggle, LED);
+    creation.connect(toggle, LED);
     //
 
     try testing.expectEqual(2, creation.handle);
@@ -35,57 +35,57 @@ test "creation led switch" {
 // Random data tests
 //
 test "creation add block" {
-    var creation = maker.Creation.init(allocator);
+    var creation = try maker.Creation.init(allocator, 6, 0);
     defer creation.deinit();
 
     //
-    try creation.addBlock(.AND, .{ -12, 3, 2 }, null);
-    try creation.addBlock(.XOR, null, null);
-    try creation.addBlock(.AND, .{ 0, 0, 0 }, null);
+    creation.addBlock(.AND, .{ -12, 3, 2 }, null);
+    creation.addBlock(.XOR, null, null);
+    creation.addBlock(.AND, .{ 0, 0, 0 }, null);
 
-    try creation.addBlock(.LED, .{ 10, -10, 2543 }, &[_]i16{ 123, 123, 23 });
-    try creation.addBlock(.NAND, null, &[_]i16{ -12, 0, 0, 0, 3434 });
-    try creation.addBlock(.BUTTON, .{ 0, 0, 0 }, &[_]i16{});
+    creation.addBlock(.LED, .{ 10, -10, 2543 }, &[_]i16{ 123, 123, 23 });
+    creation.addBlock(.NAND, null, &[_]i16{ -12, 0, 0, 0, 3434 });
+    creation.addBlock(.BUTTON, .{ 0, 0, 0 }, &[_]i16{});
     //
 
     try testing.expectEqual(6, creation.handle);
 
-    try testing.expectEqualStrings("1,,-12,3,2,;3,,,,,;1,,0,0,0,;6,,10,-10,2543,123+123+23;10,,,,,-12+0+0+0+3434;4,,0,0,0,;", creation.blocks.items);
+    try testing.expectEqualStrings("1,,-12,3,2,;3,,,,,;1,,0,0,0,;6,,10,-10,2543,123+123+23;10,,,,,-12+0+0+0+3434;4,,0,0,0,;", creation.blocks);
 }
 
 test "creation add connection" {
-    var creation = maker.Creation.init(allocator);
+    var creation = try maker.Creation.init(allocator, 0, 4);
     defer creation.deinit();
 
     //
-    try creation.connect(0, 0);
-    try creation.connect(1, 2);
-    try creation.connect(9999, 9999);
-    try creation.connect(9999, 1234);
+    creation.connect(0, 0);
+    creation.connect(1, 2);
+    creation.connect(9999, 9999);
+    creation.connect(9999, 1234);
     //
 
     try testing.expectEqual(0, creation.handle);
 
-    try testing.expectEqualStrings("0,0;1,2;9999,9999;9999,1234;", creation.connections.items);
+    try testing.expectEqualStrings("0,0;1,2;9999,9999;9999,1234;", creation.connections);
 }
 
 test "creation compile" {
-    var creation = maker.Creation.init(allocator);
+    var creation = try maker.Creation.init(allocator, 6, 6);
     defer creation.deinit();
 
     //
-    try creation.connect(0, 0);
-    try creation.connect(1, 2);
-    try creation.addBlock(.AND, .{ -12, 3, 2 }, null);
-    try creation.addBlock(.XOR, null, null);
-    try creation.connect(12, 934213);
-    try creation.addBlock(.AND, .{ 0, 0, 0 }, null);
-    try creation.connect(77777777, 4435546);
-    try creation.addBlock(.LED, .{ 10, -10, 2543 }, &[_]i16{ 123, 123, 23 });
-    try creation.addBlock(.NAND, null, &[_]i16{ -12, 0, 0, 0, 3434 });
-    try creation.addBlock(.BUTTON, .{ 0, 0, 0 }, &[_]i16{});
-    try creation.connect(9999, 9999);
-    try creation.connect(9999, 1234);
+    creation.connect(0, 0);
+    creation.connect(1, 2);
+    creation.addBlock(.AND, .{ -12, 3, 2 }, null);
+    creation.addBlock(.XOR, null, null);
+    creation.connect(12, 934213);
+    creation.addBlock(.AND, .{ 0, 0, 0 }, null);
+    creation.connect(77777777, 4435546);
+    creation.addBlock(.LED, .{ 10, -10, 2543 }, &[_]i16{ 123, 123, 23 });
+    creation.addBlock(.NAND, null, &[_]i16{ -12, 0, 0, 0, 3434 });
+    creation.addBlock(.BUTTON, .{ 0, 0, 0 }, &[_]i16{});
+    creation.connect(9999, 9999);
+    creation.connect(9999, 1234);
     //
 
     try testing.expectEqual(6, creation.handle);

@@ -12,11 +12,11 @@ pub fn main() !void {
         return error.InvalidParams;
     }
 
-    var creation = maker.Creation.init(allocator);
-    defer creation.deinit();
-
     const id = try std.fmt.parseInt(u8, args[1], 10);
     const size = try std.fmt.parseInt(u16, args[2], 10);
+
+    var creation = try maker.Creation.init(allocator, size * size * size, 0);
+    defer creation.deinit();
 
     var timer = try std.time.Timer.start();
 
@@ -29,7 +29,7 @@ pub fn main() !void {
             var z: i16 = 0;
 
             while (z < size) : (z += 1) {
-                try creation.addBlock(@enumFromInt(id), .{ x, y, z }, null);
+                creation.addBlock(@enumFromInt(id), .{ x, y, z }, null);
             }
         }
     }

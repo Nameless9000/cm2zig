@@ -1,25 +1,25 @@
 const maker = @import("maker.zig");
 
 // sizeX: 3, sizeY: <bits>, sizeZ: 1
-pub fn makeRegister(creation: *maker.Creation, bits: u16, position: ?@Vector(3, i16)) !u32 {
+pub fn makeRegister(creation: *maker.Creation, bits: u16, position: ?@Vector(3, i16)) u32 {
     const handle: u32 = creation.handle + 1;
 
     var i: i16 = 0;
     while (i < bits) : (i += 1) {
         const start = creation.handle;
         if (position) |pos| {
-            try creation.addBlock(.XOR, pos + @as(@Vector(3, i16), .{ 2, i, 0 }), null);
-            try creation.addBlock(.AND, pos + @as(@Vector(3, i16), .{ 1, i, 0 }), null);
-            try creation.addBlock(.FLIPFLOP, pos + @as(@Vector(3, i16), .{ 0, i, 0 }), null);
+            creation.addBlock(.XOR, pos + @as(@Vector(3, i16), .{ 2, i, 0 }), null);
+            creation.addBlock(.AND, pos + @as(@Vector(3, i16), .{ 1, i, 0 }), null);
+            creation.addBlock(.FLIPFLOP, pos + @as(@Vector(3, i16), .{ 0, i, 0 }), null);
         } else {
-            try creation.addBlock(.XOR, null, null);
-            try creation.addBlock(.AND, null, null);
-            try creation.addBlock(.FLIPFLOP, null, null);
+            creation.addBlock(.XOR, null, null);
+            creation.addBlock(.AND, null, null);
+            creation.addBlock(.FLIPFLOP, null, null);
         }
 
-        try creation.connect(start + 1, start + 2);
-        try creation.connect(start + 2, start + 3);
-        try creation.connect(start + 3, start + 1);
+        creation.connect(start + 1, start + 2);
+        creation.connect(start + 2, start + 3);
+        creation.connect(start + 3, start + 1);
     }
 
     return handle;
