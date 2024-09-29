@@ -13,14 +13,14 @@ pub fn main() !void {
         return error.InvalidParams;
     }
 
-    const bits = try std.fmt.parseInt(u16, args[1], 10);
+    const bits = try std.fmt.parseInt(u32, args[1], 10);
 
     var creation = try maker.Creation.init(allocator, 3 * bits, 3 * bits);
     defer creation.deinit();
 
     var timer = try std.time.Timer.start();
 
-    _ = memory.makeRegister(&creation, bits, .{ 0, 0, 0 });
+    _ = memory.makeRegister(&creation, @intCast(bits), .{ 0, 0, 0 });
 
     std.debug.print("Generation: {}us\n", .{@divTrunc(timer.lap(), 1000)});
 

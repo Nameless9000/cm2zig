@@ -13,7 +13,7 @@ pub fn main() !void {
     }
 
     const id = try std.fmt.parseInt(u8, args[1], 10);
-    const size = try std.fmt.parseInt(u16, args[2], 10);
+    const size = try std.fmt.parseInt(u32, args[2], 10);
 
     var creation = try maker.Creation.init(allocator, size * size * size, 0);
     defer creation.deinit();
